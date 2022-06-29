@@ -39,7 +39,6 @@ library:
   source-dirs: 
   - src
   - src/snake
-  - src/aux
 
 executables:
   addStrInts-exe:

@@ -25,21 +25,17 @@ source-repository head
 
 library
   exposed-modules:
+      AppState
+      TodoItem
+      View
       ListUI
       Snake
       UI
-      AppState
-      BorderDemo
-      Lib
-      MenuItem
-      TodoAppUI
-      TodoItem
   other-modules:
       Paths_justDo
   hs-source-dirs:
       src
       src/snake
-      src/aux
   build-depends:
       HUnit
     , QuickCheck
