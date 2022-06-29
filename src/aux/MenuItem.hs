@@ -1,8 +1,10 @@
 {-# LANGUAGE NamedFieldPuns #-}
+{-# LANGUAGE DataKinds #-}
 module MenuItem where
+import TodoItem (TodosList)
 
 -- simple enumeration
-data MenuItem = MainMenuView { _currentId :: Int } | TodoListView { _currentId :: Int } | HabitsTrackerView { _currentId :: Int }
+data MenuItem = MainMenuView { _currentId :: Int } | TodoListView { _currentId :: Int, _todos :: [TodosList] } | HabitsTrackerView { _currentId :: Int }
 
 getCurrentId :: MenuItem -> Int
 getCurrentId MainMenuView { _currentId } = _currentId

@@ -1,3 +1,3 @@
-# Changelog for justDoIt
+# Changelog for justDo
 
 ## Unreleased changes
