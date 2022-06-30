@@ -1,12 +1,13 @@
-{-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# OPTIONS_GHC -Wno-incomplete-patterns #-}
+
 module MainMenuUI where
 
 import AppState
 import Brick
 import qualified Brick.AttrMap as A
-import qualified Brick.Widgets.Center as C
 import qualified Brick.Widgets.Border as B
+import qualified Brick.Widgets.Center as C
 import qualified Graphics.Vty as V
 import View (mainMenuOps)
 
@@ -16,9 +17,9 @@ titleAttr = "title"
 
 borderMappings :: [(A.AttrName, V.Attr)]
 borderMappings =
-    [ (B.borderAttr,         V.yellow `on` V.black)
-    , (titleAttr,            fg V.cyan)
-    ]
+  [ (B.borderAttr, V.yellow `on` V.black),
+    (titleAttr, fg V.cyan)
+  ]
 
 -- rendering
 draw :: AppState -> [Widget ()]
@@ -27,8 +28,8 @@ draw appState = [ui]
     currentIndex = getCurrentId appState
     box =
       updateAttrMap (A.applyAttrMappings borderMappings) $
-      B.borderWithLabel (withAttr titleAttr $ str "Just do!") $
-      C.center $ vBox $ renderList' currentIndex mainMenuOps
+        B.borderWithLabel (withAttr titleAttr $ str "Just do!") $
+          C.center $ vBox $ renderList' currentIndex mainMenuOps
     ui = vBox [box, renderBottomBar]
 
 renderList' :: Int -> [String] -> [Widget ()]
