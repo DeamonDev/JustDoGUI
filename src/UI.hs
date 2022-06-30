@@ -24,11 +24,13 @@ drawUI :: AppState -> [Widget ()]
 drawUI appState = case appState of
   MainMenuView {} -> MainMenuUI.draw appState
   TodoListView {} -> undefined
+  HelpView        -> undefined 
 
 handleEvent :: AppState -> BrickEvent () () -> EventM () (Next AppState)
 handleEvent appState = case appState of
   MainMenuView {} -> MainMenuUI.handleEvent appState
   TodoListView {} -> undefined
+  HelpView        -> undefined
 
 theMap :: AttrMap
 theMap = attrMap V.defAttr []
