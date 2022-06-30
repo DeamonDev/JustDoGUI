@@ -3,32 +3,32 @@ module UI where
 import AppState (AppState, initialAppState)
 import Brick
 import Control.Monad (void)
-import View 
-import qualified MainMenuUI
 import qualified Graphics.Vty as V
-
+import qualified MainMenuUI
+import View
 
 app :: App AppState () ()
-app = App { appDraw = drawUI
-          , appChooseCursor = neverShowCursor
-          , appHandleEvent = handleEvent
-          , appStartEvent = return
-          , appAttrMap = const theMap
-          }
+app =
+  App
+    { appDraw = drawUI,
+      appChooseCursor = neverShowCursor,
+      appHandleEvent = handleEvent,
+      appStartEvent = return,
+      appAttrMap = const theMap
+    }
 
 main :: IO ()
-main = void $ defaultMain  app initialAppState
-
+main = void $ defaultMain app initialAppState
 
 drawUI :: AppState -> [Widget ()]
-drawUI appState = case appState of 
-   MainMenuView { } -> MainMenuUI.draw appState
-   TodoListView { } -> undefined 
+drawUI appState = case appState of
+  MainMenuView {} -> MainMenuUI.draw appState
+  TodoListView {} -> undefined
 
 handleEvent :: AppState -> BrickEvent () () -> EventM () (Next AppState)
-handleEvent appState = case appState of 
-  MainMenuView { } -> MainMenuUI.handleEvent appState
-  TodoListView { } -> undefined 
+handleEvent appState = case appState of
+  MainMenuView {} -> MainMenuUI.handleEvent appState
+  TodoListView {} -> undefined
 
-theMap :: AttrMap 
+theMap :: AttrMap
 theMap = attrMap V.defAttr []

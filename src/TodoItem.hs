@@ -1,13 +1,15 @@
 {-# LANGUAGE TemplateHaskell #-}
+
 module TodoItem where
+
 import Control.Lens
 
-
-data TodoItem = TodoItem { _id :: Int
-                         , _title :: String
-                         , _done :: Bool
-                         }
-                deriving (Show)
+data TodoItem = TodoItem
+  { _id :: Int,
+    _title :: String,
+    _done :: Bool
+  }
+  deriving (Show)
 
 type TodosList = [TodoItem]
 
