@@ -8,9 +8,6 @@ data View
   = MainMenuView {_currentId :: Int, menuOptions :: [String]}
   | TodoListView {_currentId :: Int, todoList :: TodosList}
 
-getCurrentId :: View -> Int
-getCurrentId MainMenuView {_currentId = currentId} = currentId
-getCurrentId TodoListView {_currentId = currentId} = currentId
 
 -- Main Menu View
 
