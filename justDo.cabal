@@ -30,14 +30,10 @@ library
       TodoItem
       UI
       View
-      ListUI
-      Snake
-      UI
   other-modules:
       Paths_justDo
   hs-source-dirs:
       src
-      src/snake
   build-depends:
       HUnit
     , QuickCheck

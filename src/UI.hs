@@ -4,14 +4,16 @@ import AppState (AppState, initialAppState)
 import Brick
 import Control.Monad (void)
 import View 
-import MainMenuUI
+import qualified MainMenuUI
+import qualified Graphics.Vty as V
+
 
 app :: App AppState () ()
 app = App { appDraw = drawUI
           , appChooseCursor = neverShowCursor
-          , appHandleEvent = undefined
+          , appHandleEvent = handleEvent
           , appStartEvent = return
-          , appAttrMap = undefined
+          , appAttrMap = const theMap
           }
 
 main :: IO ()
@@ -22,3 +24,11 @@ drawUI :: AppState -> [Widget ()]
 drawUI appState = case appState of 
    MainMenuView { } -> MainMenuUI.draw appState
    TodoListView { } -> undefined 
+
+handleEvent :: AppState -> BrickEvent () () -> EventM () (Next AppState)
+handleEvent appState = case appState of 
+  MainMenuView { } -> MainMenuUI.handleEvent appState
+  TodoListView { } -> undefined 
+
+theMap :: AttrMap 
+theMap = attrMap V.defAttr []
