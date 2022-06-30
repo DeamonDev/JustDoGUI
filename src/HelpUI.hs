@@ -27,7 +27,8 @@ draw appState = [ui]
     box =
       updateAttrMap (A.applyAttrMappings borderMappings) $
         B.borderWithLabel (withAttr helpAttr $ str "help") $
-          C.center $ vBox $ [str "We always wanted to create..."]
+          C.center $ vBox $ [str "We always wanted to create the best TODO app in the observable universe. \
+                                \ \nFinally, we ended up watching Seinfield's TV series."]
     ui = vBox [box, bottomBar]
 
 
