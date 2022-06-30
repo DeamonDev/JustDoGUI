@@ -23,3 +23,9 @@ minusOne :: AppState -> AppState
 minusOne (MainMenuView k l) =
   let index = (k - 1) `mod` length l
    in MainMenuView index l
+
+showHelp :: AppState -> AppState 
+showHelp _ = HelpView 
+
+showMainMenu :: AppState -> AppState 
+showMainMenu _ = MainMenuView 0 mainMenuOps
