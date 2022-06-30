@@ -36,10 +36,12 @@ renderList' :: Int -> [String] -> [Widget ()]
 renderList' k = map str
 
 renderBottomBar :: Widget ()
-renderBottomBar = str "[q] quit [h] help"
+renderBottomBar = str "[esc/q] quit [h] help"
 
 handleEvent :: AppState -> BrickEvent () () -> EventM () (Next AppState)
 handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'j') [])) = continue $ minusOne appState
 handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'k') [])) = continue $ addOne appState
 handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'h') [])) = continue $ showHelp appState
 handleEvent appState e@(VtyEvent (V.EvKey V.KEsc [])) = halt appState
+handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'q') [])) = halt appState
+handleEvent appState e = continue appState

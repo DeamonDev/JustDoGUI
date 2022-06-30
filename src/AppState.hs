@@ -27,5 +27,5 @@ minusOne (MainMenuView k l) =
 showHelp :: AppState -> AppState 
 showHelp _ = HelpView 
 
-showMainMenu :: AppState -> AppState 
-showMainMenu _ = MainMenuView 0 mainMenuOps
+showMainMenu :: AppState 
+showMainMenu = MainMenuView 0 mainMenuOps
