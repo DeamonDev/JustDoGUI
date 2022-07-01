@@ -16,14 +16,14 @@ import View
 titleAttr :: A.AttrName
 titleAttr = "title"
 
-selectedAttr :: A.AttrName 
+selectedAttr :: A.AttrName
 selectedAttr = "selected"
 
 borderMappings :: [(A.AttrName, V.Attr)]
 borderMappings =
   [ (B.borderAttr, V.yellow `on` V.black),
-    (titleAttr, fg V.cyan)
-  , (selectedAttr,   V.white `on` V.blue)
+    (titleAttr, fg V.cyan),
+    (selectedAttr, V.white `on` V.blue)
   ]
 
 -- rendering
@@ -31,25 +31,23 @@ draw :: AppState -> [Widget ()]
 draw appState = [ui]
   where
     currentIndex = getCurrentId appState
-    renderedList = ListRender.renderList currentIndex selectedAttr mainMenuOps
+    renderedList = ListRender.render currentIndex selectedAttr mainMenuOps
     box =
       updateAttrMap (A.applyAttrMappings borderMappings) $
         B.borderWithLabel (withAttr titleAttr $ str "Just do!") $
           C.center $ vBox renderedList
     ui = vBox [box, renderBottomBar currentIndex]
 
-
 renderBottomBar :: Int -> Widget ()
 renderBottomBar id = str $ "[esc/q] quit [h] help [j] down [k] up " ++ show id
 
-
 -- events
 getBehaviour :: Int -> AppState -> EventM () (Next AppState)
-getBehaviour id appState = 
-  case id of 
-    0 -> continue showTodos 
-    1 -> continue appState 
-    2 -> continue appState 
+getBehaviour id appState =
+  case id of
+    0 -> continue showTodos
+    1 -> continue appState
+    2 -> continue appState
     3 -> halt appState
 
 handleEvent :: AppState -> BrickEvent () () -> EventM () (Next AppState)
@@ -58,5 +56,5 @@ handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'k') [])) = continue $ addOne
 handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'h') [])) = continue $ showHelp appState
 handleEvent appState e@(VtyEvent (V.EvKey V.KEsc [])) = halt appState
 handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'q') [])) = halt appState
-handleEvent appState@MainMenuView { _currentId = currentId } e@(VtyEvent (V.EvKey V.KEnter [])) = getBehaviour currentId appState
+handleEvent appState@MainMenuView {_currentId = currentId} e@(VtyEvent (V.EvKey V.KEnter [])) = getBehaviour currentId appState
 handleEvent appState e = continue appState

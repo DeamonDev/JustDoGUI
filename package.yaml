@@ -33,11 +33,13 @@ dependencies:
 - vty
 - text
 - microlens
+- microlens-th
 - vector
 
 library:
   source-dirs: 
   - src
+  - src/form
 
 executables:
   addStrInts-exe:

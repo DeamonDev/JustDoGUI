@@ -33,4 +33,4 @@ showMainMenu :: AppState
 showMainMenu = MainMenuView 0 mainMenuOps
 
 showTodos :: AppState 
-showTodos = TodoListView 0 [] False 
+showTodos = TodoListView 0 [] 

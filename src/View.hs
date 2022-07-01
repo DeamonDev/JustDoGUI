@@ -7,7 +7,7 @@ import TodoItem (TodosList)
 data View
   = MainMenuView {_currentId :: Int, menuOptions :: [String]}
   | HelpView
-  | TodoListView {_currentId :: Int, todoList :: TodosList, isAdding :: Bool }
+  | TodoListView {_currentId :: Int, todoList :: TodosList }
 
 -- Main Menu View
 

@@ -8,8 +8,8 @@ import qualified Brick.AttrMap as A
 import qualified Graphics.Vty as V
 
 -- rendering
-renderList :: Int -> A.AttrName -> [String] -> [Widget ()]
-renderList index selectedAttr l = listRenderAux 0 index l []
+render :: Int -> A.AttrName -> [String] -> [Widget ()]
+render index selectedAttr l = listRenderAux 0 index l []
   where
     listRenderAux curr index l acc
       | curr >= length l = acc
