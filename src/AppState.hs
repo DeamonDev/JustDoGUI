@@ -24,6 +24,8 @@ minusOne (MainMenuView k l) =
   let index = (k + 1) `mod` length l
    in MainMenuView index l
 
+--enterAction :: AppState -> AppState 
+
 showHelp :: AppState -> AppState 
 showHelp _ = HelpView 
 

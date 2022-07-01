@@ -10,7 +10,7 @@ import qualified Brick.Widgets.Border as B
 import qualified Brick.Widgets.Center as C
 import qualified Graphics.Vty as V
 import ListRender
-import View (mainMenuOps)
+import View
 
 -- styling
 titleAttr :: A.AttrName
@@ -38,8 +38,6 @@ draw appState = [ui]
           C.center $ vBox renderedList
     ui = vBox [box, renderBottomBar currentIndex]
 
-renderList' :: Int -> [String] -> [Widget ()]
-renderList' k = map str
 
 renderBottomBar :: Int -> Widget ()
 renderBottomBar id = str $ "[esc/q] quit [h] help [j] down [k] up " ++ show id
@@ -50,4 +48,9 @@ handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'k') [])) = continue $ addOne
 handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'h') [])) = continue $ showHelp appState
 handleEvent appState e@(VtyEvent (V.EvKey V.KEsc [])) = halt appState
 handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'q') [])) = halt appState
+handleEvent appState@MainMenuView { _currentId = currentId } e@(VtyEvent (V.EvKey V.KEnter [])) = 
+  case currentId of 
+    3 -> halt appState
+    _ -> continue appState
+
 handleEvent appState e = continue appState
