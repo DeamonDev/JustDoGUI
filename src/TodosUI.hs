@@ -45,5 +45,5 @@ renderBottomBar id = str $ "[+] add todo [-] remove todo [r] return to main menu
 
 -- events
 handleEvent :: AppState -> BrickEvent () () -> EventM () (Next AppState)
-handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'r') [])) = continue showMainMenu
+handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'r') [])) = continue $ showMainMenu appState
 handleEvent appState e = continue appState
