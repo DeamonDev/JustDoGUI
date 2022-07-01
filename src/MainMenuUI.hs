@@ -42,15 +42,21 @@ draw appState = [ui]
 renderBottomBar :: Int -> Widget ()
 renderBottomBar id = str $ "[esc/q] quit [h] help [j] down [k] up " ++ show id
 
+
+-- events
+getBehaviour :: Int -> AppState -> EventM () (Next AppState)
+getBehaviour id appState = 
+  case id of 
+    0 -> continue appState
+    1 -> continue appState 
+    2 -> continue appState 
+    3 -> halt appState
+
 handleEvent :: AppState -> BrickEvent () () -> EventM () (Next AppState)
 handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'j') [])) = continue $ minusOne appState
 handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'k') [])) = continue $ addOne appState
 handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'h') [])) = continue $ showHelp appState
 handleEvent appState e@(VtyEvent (V.EvKey V.KEsc [])) = halt appState
 handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'q') [])) = halt appState
-handleEvent appState@MainMenuView { _currentId = currentId } e@(VtyEvent (V.EvKey V.KEnter [])) = 
-  case currentId of 
-    3 -> halt appState
-    _ -> continue appState
-
+handleEvent appState@MainMenuView { _currentId = currentId } e@(VtyEvent (V.EvKey V.KEnter [])) = getBehaviour currentId appState
 handleEvent appState e = continue appState

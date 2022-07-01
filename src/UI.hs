@@ -19,7 +19,7 @@ app =
     }
 
 main :: IO ()
-main = void $ defaultMain app initialAppState >> putStrLn "Thank you foor using Todo app!"
+main = void $ defaultMain app initialAppState >> putStrLn "Thank you for using Just do!"
 
 drawUI :: AppState -> [Widget ()]
 drawUI appState = case appState of

@@ -13,6 +13,6 @@ data View
 -- Main Menu View
 
 mainMenuOps :: [String]
-mainMenuOps = ["Todos", "Habits", "Very long nonsense text", "quit"]
+mainMenuOps = ["Todos", "Habits", "Options", "Quit"]
 
 -- Todo List View
