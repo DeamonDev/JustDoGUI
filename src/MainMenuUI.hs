@@ -31,17 +31,18 @@ draw :: AppState -> [Widget ()]
 draw appState = [ui]
   where
     currentIndex = getCurrentId appState
+    renderedList = ListRender.renderList currentIndex selectedAttr mainMenuOps
     box =
       updateAttrMap (A.applyAttrMappings borderMappings) $
         B.borderWithLabel (withAttr titleAttr $ str "Just do!") $
-          C.center $ vBox $ ListRender.renderList currentIndex selectedAttr mainMenuOps
+          C.center $ vBox renderedList
     ui = vBox [box, renderBottomBar currentIndex]
 
 renderList' :: Int -> [String] -> [Widget ()]
 renderList' k = map str
 
 renderBottomBar :: Int -> Widget ()
-renderBottomBar id = str $ "[esc/q] quit [h] help" ++ show id
+renderBottomBar id = str $ "[esc/q] quit [h] help [j] down [k] up " ++ show id
 
 handleEvent :: AppState -> BrickEvent () () -> EventM () (Next AppState)
 handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'j') [])) = continue $ minusOne appState
