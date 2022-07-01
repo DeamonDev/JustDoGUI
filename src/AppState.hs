@@ -16,12 +16,12 @@ getCurrentId TodoListView {_currentId = currentId} = currentId
 
 addOne :: AppState -> AppState
 addOne (MainMenuView k l) =
-  let index = (k + 1) `mod` length l
+  let index = (k - 1) `mod` length l
    in MainMenuView index l
 
 minusOne :: AppState -> AppState
 minusOne (MainMenuView k l) =
-  let index = (k - 1) `mod` length l
+  let index = (k + 1) `mod` length l
    in MainMenuView index l
 
 showHelp :: AppState -> AppState 
