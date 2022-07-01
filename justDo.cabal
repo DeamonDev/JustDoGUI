@@ -27,6 +27,7 @@ library
   exposed-modules:
       AppState
       HelpUI
+      ListRender
       MainMenuUI
       TodoItem
       UI

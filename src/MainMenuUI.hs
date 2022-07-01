@@ -9,16 +9,21 @@ import qualified Brick.AttrMap as A
 import qualified Brick.Widgets.Border as B
 import qualified Brick.Widgets.Center as C
 import qualified Graphics.Vty as V
+import ListRender
 import View (mainMenuOps)
 
 -- styling
 titleAttr :: A.AttrName
 titleAttr = "title"
 
+selectedAttr :: A.AttrName 
+selectedAttr = "selected"
+
 borderMappings :: [(A.AttrName, V.Attr)]
 borderMappings =
   [ (B.borderAttr, V.yellow `on` V.black),
     (titleAttr, fg V.cyan)
+  , (selectedAttr,   V.white `on` V.blue)
   ]
 
 -- rendering
@@ -29,7 +34,7 @@ draw appState = [ui]
     box =
       updateAttrMap (A.applyAttrMappings borderMappings) $
         B.borderWithLabel (withAttr titleAttr $ str "Just do!") $
-          C.center $ vBox $ renderList' currentIndex mainMenuOps
+          C.center $ vBox $ ListRender.renderList currentIndex selectedAttr mainMenuOps
     ui = vBox [box, renderBottomBar]
 
 renderList' :: Int -> [String] -> [Widget ()]
