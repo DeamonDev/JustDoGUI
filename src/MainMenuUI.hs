@@ -47,7 +47,7 @@ renderBottomBar id = str $ "[esc/q] quit [h] help [j] down [k] up " ++ show id
 getBehaviour :: Int -> AppState -> EventM () (Next AppState)
 getBehaviour id appState = 
   case id of 
-    0 -> continue appState
+    0 -> continue showTodos 
     1 -> continue appState 
     2 -> continue appState 
     3 -> halt appState

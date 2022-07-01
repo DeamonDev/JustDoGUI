@@ -30,6 +30,7 @@ library
       ListRender
       MainMenuUI
       TodoItem
+      TodosUI
       UI
       View
   other-modules:

@@ -6,16 +6,17 @@ import Control.Monad (void)
 import qualified Graphics.Vty as V
 import qualified HelpUI
 import qualified MainMenuUI
+import qualified TodosUI
 import View
 
 app :: App AppState () ()
 app =
   App
-    { appDraw = drawUI,
-      appChooseCursor = neverShowCursor,
-      appHandleEvent = handleEvent,
-      appStartEvent = return,
-      appAttrMap = const theMap
+    { appDraw = drawUI
+    , appChooseCursor = neverShowCursor
+    , appHandleEvent = handleEvent
+    , appStartEvent = return
+    , appAttrMap = const theMap
     }
 
 main :: IO ()
@@ -24,14 +25,14 @@ main = void $ defaultMain app initialAppState >> putStrLn "Thank you for using J
 drawUI :: AppState -> [Widget ()]
 drawUI appState = case appState of
   MainMenuView {} -> MainMenuUI.draw appState
-  TodoListView {} -> undefined
-  HelpView -> HelpUI.draw appState
+  TodoListView {} -> TodosUI.draw appState
+  HelpView        -> HelpUI.draw appState
 
 handleEvent :: AppState -> BrickEvent () () -> EventM () (Next AppState)
 handleEvent appState = case appState of
   MainMenuView {} -> MainMenuUI.handleEvent appState
-  TodoListView {} -> undefined
-  HelpView -> HelpUI.handleEvent appState
+  TodoListView {} -> TodosUI.handleEvent appState
+  HelpView        -> HelpUI.handleEvent appState
 
 theMap :: AttrMap
 theMap = attrMap V.defAttr []

@@ -22,19 +22,22 @@ borderMappings =
 
 -- rendering
 draw :: AppState -> [Widget ()]
-draw appState = [ui]  
+draw appState = [ui]
   where
     box =
       updateAttrMap (A.applyAttrMappings borderMappings) $
         B.borderWithLabel (withAttr helpAttr $ str "help") $
-          C.center $ vBox $ [str "We always wanted to create the best TODO app in the observable universe. \
-                                \ \nFinally, we ended up watching Seinfield's TV series."]
+          C.center $
+            vBox $
+              [ str
+                  "We always wanted to create the best TODO app in the observable universe. \
+                  \ \nFinally, we ended up watching Seinfield's TV series."
+              ]
     ui = vBox [box, bottomBar]
 
-
-bottomBar :: Widget () 
+bottomBar :: Widget ()
 bottomBar = str "[r] return to main menu"
 
 handleEvent :: AppState -> BrickEvent () () -> EventM () (Next AppState)
-handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'r') [])) = continue $ showMainMenu 
+handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'r') [])) = continue $ showMainMenu
 handleEvent appState e = continue appState
