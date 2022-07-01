@@ -5,9 +5,9 @@ module View where
 import TodoItem (TodosList)
 
 data View
-  = MainMenuView {_currentId :: Int, menuOptions :: [String]}
+  = MainMenuView {_currentId :: Int, _menuOptions :: [String]}
   | HelpView
-  | TodoListView {_currentId :: Int, todoList :: TodosList }
+  | TodoListView {_currentId :: Int, _todoList :: TodosList }
 
 -- Main Menu View
 

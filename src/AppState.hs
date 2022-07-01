@@ -3,6 +3,7 @@
 module AppState where
 
 import View
+import TodoItem
 
 -- later, we'll expand it to (View, DbConnection, ...)
 type AppState = View
@@ -13,6 +14,9 @@ initialAppState = MainMenuView 0 mainMenuOps
 getCurrentId :: AppState -> Int
 getCurrentId MainMenuView {_currentId = currentId} = currentId
 getCurrentId TodoListView {_currentId = currentId} = currentId
+
+getTodos :: AppState -> [TodoItem]
+getTodos TodoListView {_todoList = todos} = todos
 
 addOne :: AppState -> AppState
 addOne (MainMenuView k l) =
