@@ -4,6 +4,8 @@ module AppState where
 
 import TodoItem
 import View
+import Prelude hiding (id)
+import Control.Lens
 
 -- later, we'll expand it to (View, DbConnection, ...)
 type AppState = View
@@ -36,9 +38,13 @@ minusOne (TodoListView k t) =
   let index = (k + 1) `mod` length t
    in TodoListView index t
 
+getCurrentTodoIndex :: AppState -> Int 
+getCurrentTodoIndex (TodoListView k t) = if null t then 0 else maximum (map (^. id) t) + 1
+
 addTodo :: AppState -> String -> AppState
-addTodo (TodoListView k t) s =
-  let newTodo = TodoItem 10 s False
+addTodo (TodoListView k t) title =
+  let newId = if null t then 0 else maximum (map (^. id) t) + 1
+      newTodo = TodoItem newId title False
    in TodoListView k (newTodo : t)
 
 --enterAction :: AppState -> AppState
