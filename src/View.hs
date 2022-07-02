@@ -15,10 +15,13 @@ data TodoInfo = TodoInfo
   }
   deriving (Show)
 
-$(Lens.Micro.TH.makeLenses ''TodoInfo)
+$(makeLenses ''TodoInfo)
 
+getDescription :: TodoInfo -> T.Text 
+getDescription TodoInfo {_desc = desc} = desc
 
-initialTodoInfo = TodoInfo {_desc = "initial"}
+initialTodoInfo :: TodoInfo
+initialTodoInfo = TodoInfo {_desc = ""}
 
 mkForm :: TodoInfo -> Form TodoInfo e ()
 mkForm = newForm [editTextField desc () Nothing]
