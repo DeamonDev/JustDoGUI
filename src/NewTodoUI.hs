@@ -1,5 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
+{-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 
 module NewTodoUI where
 
@@ -23,9 +24,9 @@ import View (getDescription)
 -- rendering
 
 draw :: AppState -> [Widget ()]
-draw appState@NewTodoView {_form = form} = [renderForm $ form]
+draw appState@NewTodoView {_form = form} = [renderForm form]
 
-removeQuotes :: String -> String 
+removeQuotes :: String -> String
 removeQuotes [] = []
 removeQuotes [x] = []
 removeQuotes xs = tail (init xs)

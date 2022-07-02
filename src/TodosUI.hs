@@ -41,7 +41,7 @@ draw appState = [ui]
     ui = vBox [box, renderBottomBar currentIndex]
 
 renderBottomBar :: Int -> Widget ()
-renderBottomBar id = str $ "[+] add todo [-] remove todo [r] return to main menu " ++ show id
+renderBottomBar id = str $ "[+] add todo [-] remove todo [r] return to main menu [d] mark as done [u] mark as undone" 
 
 -- events
 handleEvent :: AppState -> BrickEvent () () -> EventM () (Next AppState)
