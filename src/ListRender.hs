@@ -6,7 +6,6 @@ module ListRender where
 import Brick
 import qualified Brick.AttrMap as A
 import qualified Graphics.Vty as V
-import Data.Map
 
 -- rendering
 render' :: [(String, Maybe [A.AttrName])] -> [Widget ()]
@@ -27,8 +26,11 @@ render' l = listRenderAux' 0 l []
 applyStyles :: [A.AttrName] -> Widget () -> Widget () 
 applyStyles [] w = w
 applyStyles [a] w = withAttr a w 
-applyStyles (x:xs) w = applyStyles xs $ withAttr x w 
+applyStyles (x:xs) w = applyStyles xs $ withAttr x w
 
+
+renderWithRightPadding' :: [(String, Maybe [A.AttrName])] -> [Widget ()]
+renderWithRightPadding' l = map (padRight Max) $ render' l 
 
 
 render :: Int -> A.AttrName -> [String] -> [Widget ()]
