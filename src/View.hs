@@ -10,6 +10,7 @@ data View
   = MainMenuView {_currentId :: Int, _menuOptions :: [String], _todoList :: TodosList }
   | HelpView {_todoList :: TodosList }
   | TodoListView {_currentId :: Int, _todoList :: TodosList }
+  | NewTodoView {_todoList :: TodosList}
 
 $(makeLenses ''View)
 

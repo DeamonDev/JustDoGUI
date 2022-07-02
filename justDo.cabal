@@ -29,6 +29,7 @@ library
       HelpUI
       ListRender
       MainMenuUI
+      NewTodoUI
       TodoItem
       TodosUI
       UI

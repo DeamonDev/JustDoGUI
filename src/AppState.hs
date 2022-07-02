@@ -21,6 +21,7 @@ getTodos :: AppState -> [TodoItem]
 getTodos TodoListView {_todoList = todos} = todos
 getTodos MainMenuView {_todoList = todos} = todos
 getTodos HelpView {_todoList = todos} = todos
+getTodos NewTodoView {_todoList = todos} = todos
 
 addOne :: AppState -> AppState
 addOne (MainMenuView k l t) =
@@ -41,11 +42,6 @@ minusOne (TodoListView k t) =
 getCurrentTodoIndex :: AppState -> Int 
 getCurrentTodoIndex (TodoListView k t) = if null t then 0 else maximum (map (^. id) t) + 1
 
-addTodo :: AppState -> String -> AppState
-addTodo (TodoListView k t) title =
-  let newId = if null t then 0 else maximum (map (^. id) t) + 1
-      newTodo = TodoItem newId title False
-   in TodoListView k (newTodo : t)
 
 --enterAction :: AppState -> AppState
 
@@ -63,3 +59,8 @@ showTodos :: AppState -> AppState
 showTodos appState =
   let todos = getTodos appState
    in TodoListView 0 todos
+
+showNewTodoWindow :: AppState -> AppState 
+showNewTodoWindow appState = 
+  let todos = getTodos appState 
+  in NewTodoView todos
