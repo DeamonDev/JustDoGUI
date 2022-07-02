@@ -6,6 +6,7 @@ import TodoItem
 import View
 import Prelude hiding (id)
 import Control.Lens
+import Brick.Forms
 
 -- later, we'll expand it to (View, DbConnection, ...)
 type AppState = View
@@ -63,4 +64,4 @@ showTodos appState =
 showNewTodoWindow :: AppState -> AppState 
 showNewTodoWindow appState = 
   let todos = getTodos appState 
-  in NewTodoView todos
+  in NewTodoView todos $ mkForm initialTodoInfo 
