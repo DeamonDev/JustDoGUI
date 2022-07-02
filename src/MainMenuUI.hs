@@ -31,12 +31,31 @@ draw :: AppState -> [Widget ()]
 draw appState = [ui]
   where
     currentIndex = getCurrentId appState
-    renderedList = ListRender.render currentIndex selectedAttr mainMenuOps
+    --renderedList = ListRender.render currentIndex selectedAttr mainMenuOps
+    renderedList =
+      ListRender.render' $
+        updateSelectedAttr currentIndex (\x -> (x, Just [selectedAttr])) (\x -> (x, Nothing)) mainMenuOps
     box =
       updateAttrMap (A.applyAttrMappings borderMappings) $
         B.borderWithLabel (withAttr titleAttr $ str "Just do!") $
           C.center $ vBox renderedList
     ui = vBox [box, renderBottomBar currentIndex]
+
+updateSelectedAttr :: Int -> (a -> b) -> (a -> b) -> [a] -> [b]
+updateSelectedAttr index modifyFunction defaultFunction l = 
+  updateSelectedAttr' 0 index modifyFunction defaultFunction l [] where
+    updateSelectedAttr' k index f g l acc 
+      | k >= length l = acc
+      | k == index = 
+        let 
+          newAcc = acc ++ [f $ l !! k] 
+        in updateSelectedAttr' (k + 1) index f g l newAcc
+      | otherwise = 
+        let 
+          newAcc = acc ++ [g $ l !! k]
+        in updateSelectedAttr' (k + 1) index f g l newAcc
+ 
+
 
 renderBottomBar :: Int -> Widget ()
 renderBottomBar id = str $ "[esc|q] quit [h] help [j] down [k] up " ++ show id
