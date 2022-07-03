@@ -73,3 +73,12 @@ removeAt :: Int -> [a] -> [a]
 removeAt idx xs = lft ++ rgt
   where
     (lft, _ : rgt) = splitAt idx xs
+
+completeCurrentlySelectedTodo :: AppState -> AppState
+completeCurrentlySelectedTodo TodoListView {_currentId = id, _todoList = t} =
+  TodoListView{_currentId = id, _todoList = modifyAt id (`changeTitle` "[+] ") t}
+
+modifyAt :: Int -> (a -> a) -> [a] -> [a]
+modifyAt idx f xs = lft ++ [f x] ++ rgt
+  where
+    (lft, x : rgt) = splitAt idx xs
