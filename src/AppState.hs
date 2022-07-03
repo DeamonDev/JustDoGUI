@@ -75,8 +75,13 @@ removeAt idx xs = lft ++ rgt
     (lft, _ : rgt) = splitAt idx xs
 
 completeCurrentlySelectedTodo :: AppState -> AppState
-completeCurrentlySelectedTodo TodoListView {_currentId = id, _todoList = t} =
-  TodoListView{_currentId = id, _todoList = modifyAt id (`changeTitle` "[+] ") t}
+completeCurrentlySelectedTodo todoList@TodoListView {_currentId = id, _todoList = t} =
+  let 
+    changedTitle = modifyAt id (`changeTitle` "[+] ") t
+    changeDone = modifyAt id markAsDone changedTitle
+  in 
+    if (t !! id) ^. done then todoList else TodoListView{_currentId = id, 
+                                                       _todoList = changeDone}
 
 modifyAt :: Int -> (a -> a) -> [a] -> [a]
 modifyAt idx f xs = lft ++ [f x] ++ rgt
