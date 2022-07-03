@@ -2,11 +2,11 @@
 
 module AppState where
 
+import Brick.Forms
+import Control.Lens
 import TodoItem
 import View
 import Prelude hiding (id)
-import Control.Lens
-import Brick.Forms
 
 -- later, we'll expand it to (View, DbConnection, ...)
 type AppState = View
@@ -40,9 +40,8 @@ minusOne (TodoListView k t) =
   let index = (k + 1) `mod` length t
    in TodoListView index t
 
-getCurrentTodoIndex :: AppState -> Int 
+getCurrentTodoIndex :: AppState -> Int
 getCurrentTodoIndex (TodoListView k t) = if null t then 0 else maximum (map (^. id) t) + 1
-
 
 --enterAction :: AppState -> AppState
 
@@ -61,7 +60,16 @@ showTodos appState =
   let todos = getTodos appState
    in TodoListView 0 todos
 
-showNewTodoWindow :: AppState -> AppState 
-showNewTodoWindow appState = 
-  let todos = getTodos appState 
-  in NewTodoView todos $ mkForm initialTodoInfo 
+showNewTodoWindow :: AppState -> AppState
+showNewTodoWindow appState =
+  let todos = getTodos appState
+   in NewTodoView todos $ mkForm initialTodoInfo
+
+removeCurrentlySelectedTodo :: AppState -> AppState
+removeCurrentlySelectedTodo TodoListView {_currentId = k, _todoList = t} =
+   TodoListView {_currentId = k - 1, _todoList = removeAt k t}
+
+removeAt :: Int -> [a] -> [a]
+removeAt idx xs = lft ++ rgt
+  where
+    (lft, _ : rgt) = splitAt idx xs

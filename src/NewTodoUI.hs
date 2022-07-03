@@ -12,6 +12,7 @@ import Control.Lens
 import Control.Lens.Combinators (makeLenses)
 import qualified Data.Text as T
 import qualified Graphics.Vty as V
+import qualified Brick.Widgets.Border as B
 import Lens.Micro.TH
 import TodoItem
 import View
@@ -24,7 +25,7 @@ import View (getDescription)
 -- rendering
 
 draw :: AppState -> [Widget ()]
-draw appState@NewTodoView {_form = form} = [renderForm form]
+draw appState@NewTodoView {_form = form} = [vBox [renderForm form, str "[enter] submit form [esc] abort"]]
 
 removeQuotes :: String -> String
 removeQuotes [] = []
@@ -33,6 +34,7 @@ removeQuotes xs = tail (init xs)
 
 -- events
 handleEvent :: AppState -> BrickEvent () () -> EventM () (Next AppState)
+handleEvent appState e@(VtyEvent (V.EvKey V.KEsc [])) = continue $ showTodos appState
 handleEvent appState@NewTodoView {_todoList = todos, _form = form} e@(VtyEvent (V.EvKey V.KEnter [])) =
   let c = formState form
       newTodo = TodoItem 1 (removeQuotes $ show $ getDescription c) False

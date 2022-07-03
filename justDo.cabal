@@ -35,6 +35,7 @@ library
       UI
       View
       Form
+      Scrolls
   other-modules:
       Paths_justDo
   hs-source-dirs:

@@ -1,14 +1,16 @@
 {-# LANGUAGE NamedFieldPuns #-}
-{-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TemplateHaskell #-}
 
 module View where
 
-import TodoItem (TodosList)
+import Brick
+import Brick.Forms (Form, editTextField, newForm, (@@=))
+import qualified Brick.Widgets.Border as B
 import Control.Lens
-import Brick.Forms (Form, newForm, editTextField)
-import qualified Data.Text as T
 import qualified Control.Lens as Lens.Micro.TH
+import qualified Data.Text as T
+import TodoItem (TodosList)
 
 data TodoInfo = TodoInfo
   { _desc :: T.Text
@@ -17,19 +19,19 @@ data TodoInfo = TodoInfo
 
 $(makeLenses ''TodoInfo)
 
-getDescription :: TodoInfo -> T.Text 
+getDescription :: TodoInfo -> T.Text
 getDescription TodoInfo {_desc = desc} = desc
 
 initialTodoInfo :: TodoInfo
 initialTodoInfo = TodoInfo {_desc = ""}
 
 mkForm :: TodoInfo -> Form TodoInfo e ()
-mkForm = newForm [editTextField desc () Nothing]
+mkForm = newForm [B.borderWithLabel (str "label") @@= editTextField desc () Nothing]
 
 data View
-  = MainMenuView {_currentId :: Int, _menuOptions :: [String], _todoList :: TodosList }
-  | HelpView {_todoList :: TodosList }
-  | TodoListView {_currentId :: Int, _todoList :: TodosList }
+  = MainMenuView {_currentId :: Int, _menuOptions :: [String], _todoList :: TodosList}
+  | HelpView {_todoList :: TodosList}
+  | TodoListView {_currentId :: Int, _todoList :: TodosList}
   | NewTodoView {_todoList :: TodosList, _form :: Form TodoInfo () ()}
 
 $(makeLenses ''View)
