@@ -27,7 +27,6 @@ library
   exposed-modules:
       AppState
       HelpUI
-      ListRender
       MainMenuUI
       NewTodoUI
       TodoItem
@@ -36,11 +35,13 @@ library
       View
       Form
       Scrolls
+      ListRender
   other-modules:
       Paths_justDo
   hs-source-dirs:
       src
       src/form
+      src/utils
   build-depends:
       HUnit
     , QuickCheck
