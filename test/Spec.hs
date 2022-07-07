@@ -1,11 +1,10 @@
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 import Test.QuickCheck
-import TodoItem
 import Control.Lens
 import Test.QuickCheck (Arbitrary)
 import Test.QuickCheck.Gen
 
-genPos :: Gen Int
+{- genPos :: Gen Int
 genPos = abs `fmap` (arbitrary :: Gen Int) `suchThat` (> 0)
 
 genListOfPos :: Gen [Int]
@@ -41,3 +40,4 @@ main = do
   quickCheck prop_markAsDone
   quickCheck prop_markAsUndone
   putStrLn "done!"
+ -}

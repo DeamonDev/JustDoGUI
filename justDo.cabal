@@ -25,14 +25,7 @@ source-repository head
 
 library
   exposed-modules:
-      AppState
-      HelpUI
-      MainMenuUI
-      NewTodoUI
-      TodoItem
-      TodosUI
       UI
-      View
       Form
       Scrolls
       ListRender

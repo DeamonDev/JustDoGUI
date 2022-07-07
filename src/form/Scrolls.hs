@@ -40,11 +40,11 @@ drawUi = const [ui]
              vBox [ pair, B.hBorder, singleton ]
         singleton = viewport VP3 Both $
                     vBox $ str "Press ctrl-arrow keys to scroll this viewport horizontally and vertically."
-                         : (str <$> [ "Line " <> show i | i <- [2..25::Int] ])
+                         : (str <$> [ "Line " <> show i | i <- [2..5::Int] ])
         pair = hBox [ viewport VP1 Vertical $
                       vBox $ str "Press up and down arrow keys" :
                              str "to scroll this viewport." :
-                             (str <$> [ "Line " <> (show i) | i <- [3..50::Int] ])
+                             (str <$> [ "Line " <> (show i) | i <- [3..11::Int] ])
                     , B.vBorder
                     , viewport VP2 Horizontal $
                       str "Press left and right arrow keys to scroll this viewport."
