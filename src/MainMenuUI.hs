@@ -12,12 +12,25 @@ import qualified Brick.Widgets.Center as C
 import qualified Graphics.Vty as V
 import ListRender
 import AppName (Name)
+import Data.Map
 
 -- data 
 
 -- TODO change this to [(String, Maybe Attr)] and set to Nothing
 mainMenuOps :: [String]
 mainMenuOps = ["Todos", "Habits", "Options", "Quit"]
+
+mainMenuOps' :: Map String (Maybe [AttrName])
+mainMenuOps' = fromList [("Todos", Nothing), ("Habits", Nothing), ("Options", Nothing), ("Quit", Nothing)]
+
+updateMainMenuOps :: Int -> Map String (Maybe [AttrName]) -> Map String (Maybe [AttrName])
+updateMainMenuOps currentIndex m =
+                            let key = keys m !! currentIndex
+                                oldValue = m ! key
+                                newValue = case oldValue of 
+                                  Nothing -> Just [selectedAttr]
+                                  Just l -> Just (l ++ [selectedAttr])  
+                            in insert key newValue m 
 
 -- styling
 titleAttr :: A.AttrName
@@ -38,11 +51,8 @@ draw :: AppState -> [Widget ()]
 draw appState = [ui]
   where
     currentIndex = getCurrentId appState
-    --renderedList = ListRender.render currentIndex selectedAttr mainMenuOps
     renderedList =
-      ListRender.render' $
-        ListRender.updateSelectedAttr currentIndex (\x -> (x, Just [selectedAttr])) (\x -> (x, Nothing)) mainMenuOps
-    --renderedList = map str mainMenuOps
+      ListRender.render' $ toList $ updateMainMenuOps currentIndex mainMenuOps'
     box =
       updateAttrMap (A.applyAttrMappings borderMappings) $
         B.borderWithLabel (withAttr titleAttr $ str "Just do!") $
@@ -51,7 +61,7 @@ draw appState = [ui]
 
 
 renderBottomBar :: Int -> Widget ()
-renderBottomBar id = str $ "[esc|q] quit  [h] help  [j] down  [k] up" ++ show id 
+renderBottomBar id = str $ "[esc|q] quit  [h] help  [j] down  [k] up" ++ show id
 
 
 handleEvent :: AppState -> BrickEvent () () -> EventM () (Next AppState)
