@@ -6,6 +6,7 @@ module ListRender where
 import Brick
 import qualified Brick.AttrMap as A
 import qualified Graphics.Vty as V
+import AppName (Name)
 
 -- rendering
 render' :: [(String, Maybe [A.AttrName])] -> [Widget ()]
@@ -23,7 +24,7 @@ render' l = listRenderAux' 0 l []
           newAcc = acc ++ [widget]
          in listRenderAux' (index + 1) l newAcc
 
-applyStyles :: [A.AttrName] -> Widget () -> Widget () 
+applyStyles :: [A.AttrName] -> Widget () -> Widget ()
 applyStyles [] w = w
 applyStyles [a] w = withAttr a w 
 applyStyles (x:xs) w = applyStyles xs $ withAttr x w
@@ -46,7 +47,7 @@ render index selectedAttr l = listRenderAux 0 index l []
          in listRenderAux (curr + 1) index l newAcc
 
 
-renderWithPadding :: Int -> A.AttrName -> [String] -> [Widget ()]
+renderWithPadding :: Int -> A.AttrName -> [String] -> [Widget Name]
 renderWithPadding index selectedAttr l = listRenderAux 0 index l []
   where
     listRenderAux curr index l acc

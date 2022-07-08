@@ -59,7 +59,7 @@ vp2Scroll = M.viewportScroll VP2
 vp3Scroll :: M.ViewportScroll Name
 vp3Scroll = M.viewportScroll VP3
 
-appEvent :: () -> T.BrickEvent Name e -> T.EventM Name (T.Next ())
+appEvent :: () -> T.BrickEvent Name () -> T.EventM Name (T.Next ())
 appEvent _ (T.VtyEvent (V.EvKey V.KDown  [V.MCtrl])) = M.vScrollBy vp3Scroll 1 >> M.continue ()
 appEvent _ (T.VtyEvent (V.EvKey V.KUp    [V.MCtrl])) = M.vScrollBy vp3Scroll (-1) >> M.continue ()
 appEvent _ (T.VtyEvent (V.EvKey V.KRight [V.MCtrl])) = M.hScrollBy vp3Scroll 1 >> M.continue ()
@@ -71,7 +71,7 @@ appEvent _ (T.VtyEvent (V.EvKey V.KLeft []))  = M.hScrollBy vp2Scroll (-1) >> M.
 appEvent _ (T.VtyEvent (V.EvKey V.KEsc [])) = M.halt ()
 appEvent _ _ = M.continue ()
 
-app :: M.App () e Name
+app :: M.App () () Name
 app =
     M.App { M.appDraw = drawUi
           , M.appStartEvent = return
