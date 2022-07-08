@@ -1,9 +1,9 @@
 module Main where
 
-import qualified UI 
+import qualified JustDo 
 import qualified Form
 import qualified Scrolls
 
 main :: IO ()
-main = UI.main 
+main = JustDo.main 
 

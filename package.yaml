@@ -35,6 +35,8 @@ dependencies:
 - microlens
 - microlens-th
 - vector
+- sqlite-simple
+
 
 library:
   source-dirs: 
