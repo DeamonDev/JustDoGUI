@@ -1,3 +1,3 @@
 # Just do 
 
-![Screenshot](doit101.png)
+![Screenshot](justdo.png)
