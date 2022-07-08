@@ -14,6 +14,8 @@ import ListRender
 import AppName (Name)
 
 -- data 
+
+-- TODO change this to [(String, Maybe Attr)] and set to Nothing
 mainMenuOps :: [String]
 mainMenuOps = ["Todos", "Habits", "Options", "Quit"]
 
