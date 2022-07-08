@@ -58,17 +58,3 @@ renderWithPadding index selectedAttr l = listRenderAux 0 index l []
       | curr /= index =
         let newAcc = acc ++ [padRight Max $ str (l !! curr)]
          in listRenderAux (curr + 1) index l newAcc
-
-updateSelectedAttr :: Int -> (a -> b) -> (a -> b) -> [a] -> [b]
-updateSelectedAttr index modifyFunction defaultFunction l = 
-  updateSelectedAttr' 0 index modifyFunction defaultFunction l [] where
-    updateSelectedAttr' k index f g l acc 
-      | k >= length l = acc
-      | k == index = 
-        let 
-          newAcc = acc ++ [f $ l !! k] 
-        in updateSelectedAttr' (k + 1) index f g l newAcc
-      | otherwise = 
-        let 
-          newAcc = acc ++ [g $ l !! k]
-        in updateSelectedAttr' (k + 1) index f g l newAcc
