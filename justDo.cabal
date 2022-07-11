@@ -28,6 +28,7 @@ library
       AppName
       AppState
       DbConnection
+      HelpMenuUI
       JustDo
       MainMenuUI
       TodoItem

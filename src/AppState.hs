@@ -23,3 +23,9 @@ minusOne :: AppState -> AppState
 minusOne (MainMenu k conn) =
   let index = (k + 1) `mod` 4
    in MainMenu index conn
+
+showMainMenu :: AppState -> AppState 
+showMainMenu HelpMenu { _currentId = idx, _conn = conn } = MainMenu idx conn  
+
+showHelpMenu :: AppState -> AppState 
+showHelpMenu MainMenu { _currentId = idx, _conn = conn } = HelpMenu idx conn  

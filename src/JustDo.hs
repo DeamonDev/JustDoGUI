@@ -9,16 +9,17 @@ import qualified Graphics.Vty as V
 import qualified MainMenuUI
 import AppName (Name)
 import Control.Monad
+import qualified HelpMenuUI
 
 drawUI :: AppState -> [Widget ()]
 drawUI appState = case appState of 
   MainMenu { } -> MainMenuUI.draw appState
-  HelpMenu { } -> undefined 
+  HelpMenu { } -> HelpMenuUI.draw appState 
 
 handleEvent :: AppState -> BrickEvent () () -> EventM () (Next AppState)
 handleEvent appState = case appState of 
   MainMenu { } -> MainMenuUI.handleEvent appState
-  HelpMenu { } -> undefined
+  HelpMenu { } -> HelpMenuUI.handleEvent appState
 
 theMap :: AttrMap
 theMap = attrMap V.defAttr []

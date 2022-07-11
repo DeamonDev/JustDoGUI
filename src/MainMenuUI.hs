@@ -61,5 +61,6 @@ renderBottomBar id = str $ "[esc|q] quit  [h] help  [j] down  [k] up" ++ show id
 handleEvent :: AppState -> BrickEvent () () -> EventM () (Next AppState)
 handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'k') [])) = continue $ addOne appState
 handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'j') [])) = continue $ minusOne appState
+handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'h') [])) = continue $ showHelpMenu appState
 handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'q') [])) = halt appState
 handleEvent appState e = continue appState
