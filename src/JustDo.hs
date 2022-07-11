@@ -1,4 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 
 module JustDo where
 
@@ -10,6 +11,7 @@ import qualified MainMenuUI
 import AppName (Name)
 import Control.Monad
 import qualified HelpMenuUI
+import DbConnection (DbConnection(getAllTodos))
 
 drawUI :: AppState -> [Widget ()]
 drawUI appState = case appState of 
@@ -38,4 +40,8 @@ main :: IO ()
 main = do
   conn <- open "todos.db"
   execute_ conn "CREATE TABLE IF NOT EXISTS todo_items (id INTEGER PRIMARY KEY, description TEXT, done INTEGER);"
-  void $ defaultMain app (AppState.init conn) >> putStrLn "Thank you for using Just do!"
+  todos <- getAllTodos conn
+  finalAppState <- defaultMain app (AppState.init todos) 
+  execute_ conn "DELETE FROM todo_items;"
+  -- get todos from finalAppState and insert it into our database
+  putStrLn "Thank you for using Just do!"

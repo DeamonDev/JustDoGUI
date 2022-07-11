@@ -3,29 +3,33 @@ module AppState where
 
 import DbConnection
 import Database.SQLite.Simple (Connection)
+import TodoItem
 
-data AppState = MainMenu { _currentId :: Int, _conn :: Connection }
-              | HelpMenu { _currentId :: Int, _conn :: Connection }
+data AppState = MainMenu { _currentId :: Int, _todos :: [TodoItem] }
+              | HelpMenu { _currentId :: Int, _todos :: [TodoItem] }
+              | TodoList { _currentId :: Int, _todos :: [TodoItem] }
 
-init :: Connection -> AppState
+init :: [TodoItem] -> AppState
 init = MainMenu 0
               
 getCurrentId :: AppState -> Int 
 getCurrentId MainMenu { _currentId = idx } = idx 
 getCurrentId HelpMenu { _currentId = idx } = idx
 
+
 addOne :: AppState -> AppState
-addOne (MainMenu k conn) =
+addOne (MainMenu k todos) =
   let index = (k - 1) `mod` 4
-   in MainMenu index conn
+   in MainMenu index todos
 
 minusOne :: AppState -> AppState
-minusOne (MainMenu k conn) =
+minusOne (MainMenu k todos) =
   let index = (k + 1) `mod` 4
-   in MainMenu index conn
+   in MainMenu index todos
+
 
 showMainMenu :: AppState -> AppState 
-showMainMenu HelpMenu { _currentId = idx, _conn = conn } = MainMenu idx conn  
+showMainMenu HelpMenu { _currentId = idx, _todos = todos } = MainMenu idx todos
 
 showHelpMenu :: AppState -> AppState 
-showHelpMenu MainMenu { _currentId = idx, _conn = conn } = HelpMenu idx conn  
+showHelpMenu MainMenu { _currentId = idx, _todos = todos } = HelpMenu idx todos
