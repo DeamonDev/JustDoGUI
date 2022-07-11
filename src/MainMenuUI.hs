@@ -56,7 +56,7 @@ draw appState = [ui]
     ui = vBox [box, renderBottomBar currentIndex]
 
 renderBottomBar :: Int -> Widget ()
-renderBottomBar id = str $ "[esc|q] quit  [h] help  [j] down  [k] up" ++ show id
+renderBottomBar id = str $ "[esc|q] quit  [h] help  [j] down  [k] up  [enter] action " ++ show id
 
 -- events handling
 getBehaviour :: Int -> AppState -> EventM () (Next AppState)
