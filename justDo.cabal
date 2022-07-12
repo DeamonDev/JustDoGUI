@@ -31,6 +31,7 @@ library
       HelpMenuUI
       JustDo
       MainMenuUI
+      ScottyHello
       TodoItem
       Form
       Scrolls
@@ -53,6 +54,7 @@ library
     , microlens
     , microlens-th
     , random
+    , scotty
     , sqlite-simple
     , text
     , transformers
@@ -80,6 +82,7 @@ executable addStrInts-exe
     , microlens
     , microlens-th
     , random
+    , scotty
     , sqlite-simple
     , text
     , transformers
@@ -108,6 +111,7 @@ test-suite addStrInts-test
     , microlens
     , microlens-th
     , random
+    , scotty
     , sqlite-simple
     , text
     , transformers

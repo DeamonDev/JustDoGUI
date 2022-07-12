@@ -11,6 +11,11 @@ data AppState = MainMenu { _currentId :: Int, _todos :: [TodoItem] }
 
 init :: [TodoItem] -> AppState
 init = MainMenu 0
+
+retrieveTodosFromState :: AppState -> [TodoItem]
+retrieveTodosFromState MainMenu { _todos = todos } = todos 
+retrieveTodosFromState HelpMenu { _todos = todos} = todos 
+retrieveTodosFromState TodoList { _todos = todos } = todos
               
 getCurrentId :: AppState -> Int 
 getCurrentId MainMenu { _currentId = idx } = idx 
@@ -26,7 +31,6 @@ minusOne :: AppState -> AppState
 minusOne (MainMenu k todos) =
   let index = (k + 1) `mod` 4
    in MainMenu index todos
-
 
 showMainMenu :: AppState -> AppState 
 showMainMenu HelpMenu { _currentId = idx, _todos = todos } = MainMenu idx todos
