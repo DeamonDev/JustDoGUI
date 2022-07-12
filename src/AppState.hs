@@ -1,16 +1,23 @@
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
+{-# LANGUAGE TemplateHaskell #-}
 module AppState where
 
 import DbConnection
 import Database.SQLite.Simple (Connection)
 import TodoItem
+import Control.Lens
 
 data AppState = MainMenu { _currentId :: Int, _todos :: [TodoItem] }
               | HelpMenu { _currentId :: Int, _todos :: [TodoItem] }
               | TodoList { _currentId :: Int, _todos :: [TodoItem] }
 
+$(makeLenses ''AppState)
+
 init :: [TodoItem] -> AppState
 init = MainMenu 0
+
+retrieveTodosFromState' :: AppState -> [TodoItem]
+retrieveTodosFromState' appState = appState ^. todos
 
 retrieveTodosFromState :: AppState -> [TodoItem]
 retrieveTodosFromState MainMenu { _todos = todos } = todos 

@@ -31,7 +31,6 @@ library
       HelpMenuUI
       JustDo
       MainMenuUI
-      ScottyHello
       TodoItem
       Form
       Scrolls
