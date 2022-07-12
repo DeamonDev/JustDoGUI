@@ -22,7 +22,6 @@ instance DbConnection Connection where
 
   insertTodo conn desc = do
     rowId <- lastRowId conn
-    print rowId
     execute
       conn
       "INSERT INTO todo_items (id, description, done) VALUES (?,?,?)"

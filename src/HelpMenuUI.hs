@@ -10,6 +10,11 @@ import Brick.Types
 import qualified Brick.Widgets.Border as B
 import qualified Brick.Widgets.Center as C
 import qualified Graphics.Vty as V
+import Control.Lens
+import qualified DbConnection
+import Control.Monad.IO.Class
+import DbConnection
+import Control.Monad.Trans.Class
 
 helpAttr :: A.AttrName
 helpAttr = "help"
@@ -40,4 +45,8 @@ bottomBar = str "[r] return to main menu"
 
 handleEvent :: AppState -> BrickEvent () () -> EventM () (Next AppState)
 handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'r') [])) = continue $ showMainMenu appState
+handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'a') [])) = do
+                                                            let conn_ = appState ^. conn 
+                                                            liftIO $ insertTodo conn_ "X"
+                                                            continue appState
 handleEvent appState e = continue appState

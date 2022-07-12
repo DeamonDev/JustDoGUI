@@ -7,22 +7,14 @@ import Database.SQLite.Simple (Connection)
 import TodoItem
 import Control.Lens
 
-data AppState = MainMenu { _currentId :: Int, _todos :: [TodoItem] }
-              | HelpMenu { _currentId :: Int, _todos :: [TodoItem] }
-              | TodoList { _currentId :: Int, _todos :: [TodoItem] }
+data AppState = MainMenu { _currentId :: Int, _conn :: Connection }
+              | HelpMenu { _currentId :: Int, _conn :: Connection }
+              | TodoList { _currentId :: Int, _conn :: Connection }
 
 $(makeLenses ''AppState)
 
-init :: [TodoItem] -> AppState
+init :: Connection -> AppState
 init = MainMenu 0
-
-retrieveTodosFromState' :: AppState -> [TodoItem]
-retrieveTodosFromState' appState = appState ^. todos
-
-retrieveTodosFromState :: AppState -> [TodoItem]
-retrieveTodosFromState MainMenu { _todos = todos } = todos 
-retrieveTodosFromState HelpMenu { _todos = todos} = todos 
-retrieveTodosFromState TodoList { _todos = todos } = todos
               
 getCurrentId :: AppState -> Int 
 getCurrentId MainMenu { _currentId = idx } = idx 
@@ -30,9 +22,9 @@ getCurrentId HelpMenu { _currentId = idx } = idx
 
 
 addOne :: AppState -> AppState
-addOne (MainMenu k todos) =
+addOne (MainMenu k conn) =
   let index = (k - 1) `mod` 4
-   in MainMenu index todos
+   in MainMenu index conn 
 
 minusOne :: AppState -> AppState
 minusOne (MainMenu k todos) =
@@ -40,7 +32,7 @@ minusOne (MainMenu k todos) =
    in MainMenu index todos
 
 showMainMenu :: AppState -> AppState 
-showMainMenu HelpMenu { _currentId = idx, _todos = todos } = MainMenu idx todos
+showMainMenu HelpMenu { _currentId = idx, _conn = conn } = MainMenu idx conn
 
 showHelpMenu :: AppState -> AppState 
-showHelpMenu MainMenu { _currentId = idx, _todos = todos } = HelpMenu idx todos
+showHelpMenu MainMenu { _currentId = idx, _conn = conn } = HelpMenu idx conn
