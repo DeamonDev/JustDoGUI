@@ -27,10 +27,13 @@ updateMainMenuOps currentIndex m =
       newValue = case oldValue of
         Nothing -> Just [selectedAttr]
         Just l ->
-          if titleAttr `elem` l then Just (selectedDoneAttr : l) else Just (selectedAttr : l)
+          if doneAttr `elem` l then Just (selectedDoneAttr : l) else Just (selectedAttr : l)
    in insert key newValue m
 
 -- styling
+doneAttr :: A.AttrName 
+doneAttr = "done"
+
 titleAttr :: A.AttrName
 titleAttr = "title"
 
@@ -44,8 +47,9 @@ borderMappings :: [(A.AttrName, V.Attr)]
 borderMappings =
   [ (B.borderAttr, V.yellow `on` V.black),
     (titleAttr, fg V.cyan),
+    (doneAttr, fg V.green),
     (selectedAttr, V.black `on` V.yellow),
-    (selectedDoneAttr, V.cyan `on` V.yellow)
+    (selectedDoneAttr, V.green `on` V.yellow)
   ]
 
 -- rendering
@@ -56,7 +60,7 @@ draw appState = [ui]
     todosListIds = Prelude.map (^. TodoItem.id) (appState ^. todos)
     todosListTitles = Prelude.map (^. title) (appState ^. todos)
     todosListDones = Prelude.map (^. done) (appState ^. todos)
-    doneAttrList = Prelude.map (\d -> if not d then Nothing else Just [titleAttr]) todosListDones
+    doneAttrList = Prelude.map (\d -> if not d then Nothing else Just [doneAttr]) todosListDones
     todosList = zipWith (\i title -> "[" ++ show i ++ "] " ++ title) todosListIds todosListTitles
     listToRender = zip todosList doneAttrList  :: [(String, Maybe [AttrName])]
     mainMenuList = toList $ updateMainMenuOps currentIndex (fromList listToRender)
