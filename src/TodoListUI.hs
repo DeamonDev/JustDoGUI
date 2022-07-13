@@ -15,6 +15,8 @@ import Database.SQLite.Simple
 import qualified Graphics.Vty as V
 import ListRender
 import TodoItem
+import qualified DbConnection
+import Control.Monad.IO.Class
 
 -- data
 
@@ -71,4 +73,14 @@ handleEvent :: AppState -> BrickEvent () () -> EventM () (Next AppState)
 handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'k') [])) = continue $ addOne appState
 handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'j') [])) = continue $ minusOne appState
 handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'r') [])) = continue $ showMainMenu appState
+handleEvent appState@TodoList{_conn = conn, _todos = todos} e@(VtyEvent (V.EvKey (V.KChar 'd') [])) = do 
+                                                            let currId = getCurrentId appState
+                                                            liftIO $ DbConnection.markAsDone conn (currId + 1)
+                                                            newTodos <- liftIO $ DbConnection.getAllTodos conn
+                                                            continue appState{_todos = newTodos}
+handleEvent appState@TodoList{_conn = conn, _todos = todos} e@(VtyEvent (V.EvKey (V.KChar 'u') [])) = do 
+                                                            let currId = getCurrentId appState
+                                                            liftIO $ DbConnection.markAsUndone conn (currId + 1)
+                                                            newTodos <- liftIO $ DbConnection.getAllTodos conn
+                                                            continue appState{_todos = newTodos}
 handleEvent appState e = continue appState
