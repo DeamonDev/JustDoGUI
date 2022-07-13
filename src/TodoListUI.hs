@@ -17,6 +17,7 @@ import ListRender
 import TodoItem
 import qualified DbConnection
 import Control.Monad.IO.Class
+import AppState (showNewTodoWindow)
 
 -- data
 
@@ -89,6 +90,7 @@ handleEvent :: AppState -> BrickEvent () () -> EventM () (Next AppState)
 handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'k') [])) = continue $ addOne appState
 handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'j') [])) = continue $ minusOne appState
 handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'r') [])) = continue $ showMainMenu appState
+handleEvent appState e@(VtyEvent (V.EvKey (V.KChar '+') [])) = continue $ showNewTodoWindow appState
 handleEvent appState@TodoList{_conn = conn, _todos = todos} e@(VtyEvent (V.EvKey (V.KChar 'd') [])) = do
                                                             let currId = getCurrentId appState
                                                             liftIO $ DbConnection.markAsDone conn (currId + 1)

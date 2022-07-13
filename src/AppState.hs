@@ -1,4 +1,5 @@
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
 module AppState where
 
@@ -6,10 +7,13 @@ import DbConnection
 import Database.SQLite.Simple (Connection)
 import TodoItem
 import Control.Lens
+import Brick.Forms
+import TodoInfo
 
 data AppState = MainMenu { _currentId :: Int, _conn :: Connection }
               | HelpMenu { _currentId :: Int, _conn :: Connection }
               | TodoList { _currentId :: Int, _conn :: Connection, _todos :: [TodoItem] }
+              | NewTodo  { _form :: Form TodoInfo () (), _conn :: Connection }
 
 $(makeLenses ''AppState)
 
@@ -48,5 +52,11 @@ showHelpMenu MainMenu { _currentId = idx, _conn = conn } = HelpMenu idx conn
 
 showTodosList :: Connection -> [TodoItem] -> AppState
 showTodosList = TodoList 0
+
+initialTodoInfo :: TodoInfo
+initialTodoInfo = TodoInfo {_desc = ""}
+
+showNewTodoWindow :: AppState -> AppState 
+showNewTodoWindow TodoList { _conn = conn } = NewTodo (mkForm initialTodoInfo) conn
 
 
