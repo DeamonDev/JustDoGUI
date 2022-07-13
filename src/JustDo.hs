@@ -13,17 +13,20 @@ import DbConnection (DbConnection (getAllTodos))
 import qualified Graphics.Vty as V
 import qualified HelpMenuUI
 import qualified MainMenuUI
+import qualified TodoListUI
 import TodoItem
 
 drawUI :: AppState -> [Widget ()]
 drawUI appState = case appState of
   MainMenu {} -> MainMenuUI.draw appState
   HelpMenu {} -> HelpMenuUI.draw appState
+  TodoList {} -> TodoListUI.draw appState
 
 handleEvent :: AppState -> BrickEvent () () -> EventM () (Next AppState)
 handleEvent appState = case appState of
   MainMenu {} -> MainMenuUI.handleEvent appState
   HelpMenu {} -> HelpMenuUI.handleEvent appState
+  TodoList {} -> TodoListUI.handleEvent appState
 
 theMap :: AttrMap
 theMap = attrMap V.defAttr []

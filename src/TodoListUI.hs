@@ -1,8 +1,7 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TupleSections #-}
-{-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 
-module MainMenuUI where
+module TodoListUI where
 
 import AppName (Name)
 import AppState
@@ -10,16 +9,14 @@ import Brick
 import qualified Brick.AttrMap as A
 import qualified Brick.Widgets.Border as B
 import qualified Brick.Widgets.Center as C
+import Control.Lens
 import Data.Map
+import Database.SQLite.Simple
 import qualified Graphics.Vty as V
 import ListRender
-import Control.Lens
-import DbConnection
-import Control.Monad.IO.Class
+import TodoItem
 
 -- data
-mainMenuOps :: Map String (Maybe [AttrName])
-mainMenuOps = fromList [("[1] Todos", Nothing), ("[2] Habits", Nothing), ("[3] Options", Nothing), ("[4] Quit", Nothing)]
 
 updateMainMenuOps :: Int -> Map String (Maybe [AttrName]) -> Map String (Maybe [AttrName])
 updateMainMenuOps currentIndex m =
@@ -49,9 +46,15 @@ draw :: AppState -> [Widget ()]
 draw appState = [ui]
   where
     currentIndex = getCurrentId appState
-    mainMenuList = toList $ updateMainMenuOps currentIndex mainMenuOps
+    todosListIds = Prelude.map (^. TodoItem.id) (appState ^. todos)
+    todosListTitles = Prelude.map (^. title) (appState ^. todos)
+    todosList = zipWith (\i title -> "[" ++ show i ++ "] " ++ title) todosListIds todosListTitles
+    listToRender = Prelude.map (\x -> (x, Nothing)) todosList :: [(String, Maybe [AttrName])]
+    mainMenuList = toList $ updateMainMenuOps currentIndex (fromList listToRender)
     renderedList =
-      ListRender.render' mainMenuList
+      if Prelude.null todosListIds
+        then [str "Not todos yet"]
+        else ListRender.render' mainMenuList
     box =
       updateAttrMap (A.applyAttrMappings borderMappings) $
         B.borderWithLabel (withAttr titleAttr $ str "Just do!") $
@@ -59,24 +62,11 @@ draw appState = [ui]
     ui = vBox [box, renderBottomBar currentIndex]
 
 renderBottomBar :: Int -> Widget ()
-renderBottomBar id = str $ "[esc|q] quit  [h] help  [j] down  [k] up  [enter] action " ++ show id
+renderBottomBar id = str $ "[r] return to main menu  [+] add todo  [-] remove todo " ++ show id
 
 -- events handling
-getBehaviour :: Int -> AppState -> EventM () (Next AppState)
-getBehaviour id appState =
-  case id of
-    0 -> do 
-      let conn_ = appState ^. conn
-      todos <- liftIO $ getAllTodos conn_
-      continue $ showTodosList conn_ todos
-    1 -> continue appState
-    2 -> continue appState
-    3 -> halt appState
-
 handleEvent :: AppState -> BrickEvent () () -> EventM () (Next AppState)
 handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'k') [])) = continue $ addOne appState
 handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'j') [])) = continue $ minusOne appState
-handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'h') [])) = continue $ showHelpMenu appState
-handleEvent appState@MainMenu {_currentId = currentId} e@(VtyEvent (V.EvKey V.KEnter [])) = getBehaviour currentId appState
-handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'q') [])) = halt appState
+handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'r') [])) = continue $ showMainMenu appState
 handleEvent appState e = continue appState
