@@ -26,7 +26,8 @@ updateMainMenuOps currentIndex m =
       oldValue = m ! key
       newValue = case oldValue of
         Nothing -> Just [selectedAttr]
-        Just l -> Just (selectedAttr : l)
+        Just l ->
+          if titleAttr `elem` l then Just (selectedDoneAttr : l) else Just (selectedAttr : l)
    in insert key newValue m
 
 -- styling
@@ -36,11 +37,15 @@ titleAttr = "title"
 selectedAttr :: A.AttrName
 selectedAttr = "selected"
 
+selectedDoneAttr :: A.AttrName
+selectedDoneAttr = "selectedDoneAttr"
+
 borderMappings :: [(A.AttrName, V.Attr)]
 borderMappings =
   [ (B.borderAttr, V.yellow `on` V.black),
     (titleAttr, fg V.cyan),
-    (selectedAttr, V.black `on` V.yellow)
+    (selectedAttr, V.black `on` V.yellow),
+    (selectedDoneAttr, V.cyan `on` V.yellow)
   ]
 
 -- rendering
@@ -73,12 +78,12 @@ handleEvent :: AppState -> BrickEvent () () -> EventM () (Next AppState)
 handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'k') [])) = continue $ addOne appState
 handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'j') [])) = continue $ minusOne appState
 handleEvent appState e@(VtyEvent (V.EvKey (V.KChar 'r') [])) = continue $ showMainMenu appState
-handleEvent appState@TodoList{_conn = conn, _todos = todos} e@(VtyEvent (V.EvKey (V.KChar 'd') [])) = do 
+handleEvent appState@TodoList{_conn = conn, _todos = todos} e@(VtyEvent (V.EvKey (V.KChar 'd') [])) = do
                                                             let currId = getCurrentId appState
                                                             liftIO $ DbConnection.markAsDone conn (currId + 1)
                                                             newTodos <- liftIO $ DbConnection.getAllTodos conn
                                                             continue appState{_todos = newTodos}
-handleEvent appState@TodoList{_conn = conn, _todos = todos} e@(VtyEvent (V.EvKey (V.KChar 'u') [])) = do 
+handleEvent appState@TodoList{_conn = conn, _todos = todos} e@(VtyEvent (V.EvKey (V.KChar 'u') [])) = do
                                                             let currId = getCurrentId appState
                                                             liftIO $ DbConnection.markAsUndone conn (currId + 1)
                                                             newTodos <- liftIO $ DbConnection.getAllTodos conn
