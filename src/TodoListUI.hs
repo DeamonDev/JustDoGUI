@@ -24,7 +24,7 @@ updateMainMenuOps currentIndex m =
       oldValue = m ! key
       newValue = case oldValue of
         Nothing -> Just [selectedAttr]
-        Just l -> Just ([selectedAttr] ++ l)
+        Just l -> Just (selectedAttr : l)
    in insert key newValue m
 
 -- styling
@@ -48,8 +48,10 @@ draw appState = [ui]
     currentIndex = getCurrentId appState
     todosListIds = Prelude.map (^. TodoItem.id) (appState ^. todos)
     todosListTitles = Prelude.map (^. title) (appState ^. todos)
+    todosListDones = Prelude.map (^. done) (appState ^. todos)
+    doneAttrList = Prelude.map (\d -> if not d then Nothing else Just [titleAttr]) todosListDones
     todosList = zipWith (\i title -> "[" ++ show i ++ "] " ++ title) todosListIds todosListTitles
-    listToRender = Prelude.map (\x -> (x, Nothing)) todosList :: [(String, Maybe [AttrName])]
+    listToRender = zip todosList doneAttrList  :: [(String, Maybe [AttrName])]
     mainMenuList = toList $ updateMainMenuOps currentIndex (fromList listToRender)
     renderedList =
       if Prelude.null todosListIds
