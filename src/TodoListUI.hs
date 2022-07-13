@@ -20,6 +20,18 @@ import Control.Monad.IO.Class
 
 -- data
 
+prepareListToRender :: AppState -> [(String, Maybe [AttrName])]
+prepareListToRender appState = 
+  let 
+    currentIndex = getCurrentId appState
+    todosListIds = Prelude.map (^. TodoItem.id) (appState ^. todos)
+    todosListTitles = Prelude.map (^. title) (appState ^. todos)
+    todosListDones = Prelude.map (^. done) (appState ^. todos)
+    doneAttrList = Prelude.map (\d -> if not d then Nothing else Just [doneAttr]) todosListDones
+    todosList = zipWith (\i title -> "[" ++ show i ++ "] " ++ title) todosListIds todosListTitles
+  in zip todosList doneAttrList
+
+
 updateMainMenuOps :: Int -> Map String (Maybe [AttrName]) -> Map String (Maybe [AttrName])
 updateMainMenuOps currentIndex m =
   let key = keys m !! currentIndex
@@ -57,15 +69,10 @@ draw :: AppState -> [Widget ()]
 draw appState = [ui]
   where
     currentIndex = getCurrentId appState
-    todosListIds = Prelude.map (^. TodoItem.id) (appState ^. todos)
-    todosListTitles = Prelude.map (^. title) (appState ^. todos)
-    todosListDones = Prelude.map (^. done) (appState ^. todos)
-    doneAttrList = Prelude.map (\d -> if not d then Nothing else Just [doneAttr]) todosListDones
-    todosList = zipWith (\i title -> "[" ++ show i ++ "] " ++ title) todosListIds todosListTitles
-    listToRender = zip todosList doneAttrList  :: [(String, Maybe [AttrName])]
+    listToRender = prepareListToRender appState
     mainMenuList = toList $ updateMainMenuOps currentIndex (fromList listToRender)
     renderedList =
-      if Prelude.null todosListIds
+      if Prelude.null listToRender
         then [str "Not todos yet"]
         else ListRender.render' mainMenuList
     box =
