@@ -24,7 +24,7 @@ updateMainMenuOps currentIndex m =
       oldValue = m ! key
       newValue = case oldValue of
         Nothing -> Just [selectedAttr]
-        Just l -> Just (l ++ [selectedAttr])
+        Just l -> Just ([selectedAttr] ++ l)
    in insert key newValue m
 
 -- styling
