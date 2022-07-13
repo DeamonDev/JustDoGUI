@@ -32,8 +32,8 @@ prepareListToRender appState =
   in zip todosList doneAttrList
 
 
-updateMainMenuOps :: Int -> M.Map String (Maybe [AttrName]) -> M.Map String (Maybe [AttrName])
-updateMainMenuOps currentIndex m =
+updateTodosAttributes:: Int -> M.Map String (Maybe [AttrName]) -> M.Map String (Maybe [AttrName])
+updateTodosAttributes currentIndex m =
   let key = M.keys m !! currentIndex
       oldValue = m M.! key
       newValue = case oldValue of
@@ -70,10 +70,10 @@ draw appState = [ui]
   where
     currentIndex = getCurrentId appState
     listToRender = prepareListToRender appState
-    mainMenuList = M.toList $ updateMainMenuOps currentIndex (M.fromList listToRender)
+    mainMenuList = M.toList $ updateTodosAttributes currentIndex (M.fromList listToRender)
     renderedList =
       if Prelude.null listToRender
-        then [str "Not todos yet"]
+        then [str "Not todos yet, don't be shy and add them! :)"]
         else ListRender.render' mainMenuList
     box =
       updateAttrMap (A.applyAttrMappings borderMappings) $
@@ -99,4 +99,10 @@ handleEvent appState@TodoList{_conn = conn, _todos = todos} e@(VtyEvent (V.EvKey
                                                             liftIO $ DbConnection.markAsUndone conn (currId + 1)
                                                             newTodos <- liftIO $ DbConnection.getAllTodos conn
                                                             continue appState{_todos = newTodos}
+handleEvent appState@TodoList{_conn = conn, _todos = todos} e@(VtyEvent (V.EvKey (V.KChar '-') [])) = do
+                                                            let currId = getCurrentId appState
+                                                            liftIO $ DbConnection.removeTodo conn (currId + 1)
+                                                            newTodos <- liftIO $ DbConnection.getAllTodos conn
+                                                            continue appState{_todos = newTodos}
+
 handleEvent appState e = continue appState
