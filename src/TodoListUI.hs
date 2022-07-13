@@ -10,7 +10,7 @@ import qualified Brick.AttrMap as A
 import qualified Brick.Widgets.Border as B
 import qualified Brick.Widgets.Center as C
 import Control.Lens
-import Data.Map
+import qualified Data.Map as M
 import Database.SQLite.Simple
 import qualified Graphics.Vty as V
 import ListRender
@@ -24,23 +24,23 @@ prepareListToRender :: AppState -> [(String, Maybe [AttrName])]
 prepareListToRender appState = 
   let 
     currentIndex = getCurrentId appState
-    todosListIds = Prelude.map (^. TodoItem.id) (appState ^. todos)
-    todosListTitles = Prelude.map (^. title) (appState ^. todos)
-    todosListDones = Prelude.map (^. done) (appState ^. todos)
-    doneAttrList = Prelude.map (\d -> if not d then Nothing else Just [doneAttr]) todosListDones
+    todosListIds = map (^. TodoItem.id) (appState ^. todos)
+    todosListTitles = map (^. title) (appState ^. todos)
+    todosListDones = map (^. done) (appState ^. todos)
+    doneAttrList = map (\d -> if not d then Nothing else Just [doneAttr]) todosListDones
     todosList = zipWith (\i title -> "[" ++ show i ++ "] " ++ title) todosListIds todosListTitles
   in zip todosList doneAttrList
 
 
-updateMainMenuOps :: Int -> Map String (Maybe [AttrName]) -> Map String (Maybe [AttrName])
+updateMainMenuOps :: Int -> M.Map String (Maybe [AttrName]) -> M.Map String (Maybe [AttrName])
 updateMainMenuOps currentIndex m =
-  let key = keys m !! currentIndex
-      oldValue = m ! key
+  let key = M.keys m !! currentIndex
+      oldValue = m M.! key
       newValue = case oldValue of
         Nothing -> Just [selectedAttr]
         Just l ->
           if doneAttr `elem` l then Just (selectedDoneAttr : l) else Just (selectedAttr : l)
-   in insert key newValue m
+   in M.insert key newValue m
 
 -- styling
 doneAttr :: A.AttrName 
@@ -70,7 +70,7 @@ draw appState = [ui]
   where
     currentIndex = getCurrentId appState
     listToRender = prepareListToRender appState
-    mainMenuList = toList $ updateMainMenuOps currentIndex (fromList listToRender)
+    mainMenuList = M.toList $ updateMainMenuOps currentIndex (M.fromList listToRender)
     renderedList =
       if Prelude.null listToRender
         then [str "Not todos yet"]
@@ -82,7 +82,7 @@ draw appState = [ui]
     ui = vBox [box, renderBottomBar currentIndex]
 
 renderBottomBar :: Int -> Widget ()
-renderBottomBar id = str $ "[r] return to main menu  [+] add todo  [-] remove todo " ++ show id
+renderBottomBar id = str $ "[r] return to main menu  [+] add todo  [-] remove todo  [d/u] mark as done/undone" ++ show id
 
 -- events handling
 handleEvent :: AppState -> BrickEvent () () -> EventM () (Next AppState)
