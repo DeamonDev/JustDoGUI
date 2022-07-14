@@ -105,6 +105,6 @@ handleEvent appState@TodoList{_conn = conn, _todos = todos} e@(VtyEvent (V.EvKey
                                                             let currId = getCurrentId appState
                                                             liftIO $ DbConnection.removeTodo conn (currId + 1)
                                                             newTodos <- liftIO $ DbConnection.getAllTodos conn
-                                                            continue appState{_todos = newTodos}
+                                                            continue appState{_currentId = 0, _todos = newTodos}
 
 handleEvent appState e = continue appState

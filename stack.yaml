@@ -4,5 +4,5 @@ packages:
 extra-deps: []
 flags: {}
 extra-package-dbs: []
-
+local-bin-path: bin
 system-ghc: false

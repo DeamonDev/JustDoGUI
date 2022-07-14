@@ -64,7 +64,7 @@ library
     , vty
   default-language: Haskell2010
 
-executable addStrInts-exe
+executable justDo-exe
   main-is: Main.hs
   other-modules:
       Paths_justDo
@@ -92,7 +92,7 @@ executable addStrInts-exe
     , vty
   default-language: Haskell2010
 
-test-suite addStrInts-test
+test-suite justDo-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:

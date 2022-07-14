@@ -46,7 +46,7 @@ library:
   - src/utils
 
 executables:
-  addStrInts-exe:
+  justDo-exe:
     main:                Main.hs
     source-dirs:         app
     ghc-options:
@@ -57,7 +57,7 @@ executables:
     - justDo
 
 tests:
-  addStrInts-test:
+  justDo-test:
     main:                Spec.hs
     source-dirs:         test
     ghc-options:
