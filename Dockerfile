@@ -13,13 +13,13 @@ RUN apt-get update && apt-get install -y \
 # My static executable is going to be in a folder called bin/
 # And we copy it to /usr/bin/ on in the docker image
 # More information on how it gets there later on
-COPY bin/justDo-exe /usr/bin/myapp-exe
+COPY bin/justDo-exe /usr/bin/justDo-exe
 
 # My app looks for a directory called myapp/, and expects to find the config/
 # and data/ directories there
 # I already have the config/ directory in my project directory
 # I need to make the data/ directory
-RUN mkdir -p /myapp/data
+RUN mkdir -p /justdo/data
 
 # Tell docker to run my app when the image is loaded
-CMD /usr/bin/myapp-exe
+CMD /usr/bin/justDo-exe

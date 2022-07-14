@@ -3,4 +3,4 @@ services:
   myapp:
     build:
       context: .
-    image: myname/myapp
+    image: justdo
